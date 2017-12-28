@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('./app/routes'));
 
 var dbConnect = require("./app/config/db");
-app.listen(3000, function () {
+app.listen(3030, function () {
   console.log('Example app listening on port 3000!');
 });
 
