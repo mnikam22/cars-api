@@ -9,12 +9,16 @@ module.exports.dealerLogin = function(req,res){
 			res.status(500).send(err);
 		}
 		else{
-			if(dealer.password == md5(data.password)){
+			console.log(dealer , "dealer data");
+			if(dealer && dealer.password == md5(data.password)){
                 // Generate token now
                 var loginToken = jwtsign.sign({email : dealer.email}, 'Car-Deals-2017shhhhHHHHH');
                 res.send({error:false, token: loginToken});
             }
-            res.status(401).send({ error:true , message : "Invalid credentials."});
+            else{
+            	res.status(401).send({ error:true , message : "Invalid credentials."});	
+            }
+            
 		}
 	})
 }

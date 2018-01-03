@@ -1,7 +1,9 @@
 var router = require("express").Router();
 router.use('/user', require("../modules/user/route"));
 router.use('/dealer', require("../modules/dealer/routes"));
-router.use('/car', require("../modules/car/routes"));
+router.use('/car', require("../modules/cars/routes"));
+
+var jwtsign = require('jsonwebtoken');
 
 /*
 var jwtsign = require('jsonwebtoken');

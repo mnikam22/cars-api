@@ -1,35 +1,55 @@
 var mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
-var Car = mongoose.model('Car', new Schema({
-        make : String,
-        model : String,
-        model_id : String,
-        year : Number,
-        added_date : Date
+const Make = mongoose.model('Make', new Schema({ 
+        name: String,
+        make_id : String    
     })
 );
 
-module.exports.add = function(data, cb){
-    var car = new Car;
-    car.lease_term = data.lease_term;
-    car.dealer_id = data.dealer_id;
-    car.car_id = data.car_id;
-    car.signing_due = data.signing_due;
-    car.monthly_lease_price = data.monthly_lease_price;
-    car.save(function(err, response){
-        if(err){
-            cb(err);
-        }
-        cb(false,response);
+const Model = mongoose.model('Model', new Schema({
+    make : String,
+    name : String,
+    type : String
+}))
+
+module.exports.addMakes = function(data, cb){   
+    Make.remove({}, function(err1, response1){
+        Make.insertMany(data , function(err, response){
+            if(err){
+                cb(err);
+            }
+            cb(false,response);
+        })    
     })
+    
 }
 
+module.exports.addModelsByMakeId = function(makeId, data, cb){    
+    Model.remove({make_id: makeId }, function(err1, response1){
+        Model.insertMany(data, function(err, response){
+            if(err){
+                cb(err);
+            }
+            cb(false,response);
+        })
+    })    
+}
 
-module.exports.search = function(query, cb){
-    Car.find(query, function(err,cars){
+module.exports.findModels = function(data, cb){
+    Model.find(data, function(err, models){
         if(err) {
             cb(err);
         }
-        cb(false, cars);
+        cb(false, models);        
+    })
+}
+
+module.exports.findAllMakes = function(data, cb){
+    Make.find({}, function(err,makes){        
+        if(err) {
+            cb(err);
+        }
+        cb(false, makes);        
     });
 }
