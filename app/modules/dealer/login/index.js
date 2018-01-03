@@ -11,9 +11,9 @@ module.exports.dealerLogin = function(req,res){
 		else{
 			console.log(dealer , "dealer data");
 			if(dealer && dealer.password == md5(data.password)){
-                // Generate token now
+                //Generate token now
                 var loginToken = jwtsign.sign({email : dealer.email}, 'Car-Deals-2017shhhhHHHHH');
-                res.send({error:false, token: loginToken});
+                res.send({error:false, token: loginToken, user: dealer});
             }
             else{
             	res.status(401).send({ error:true , message : "Invalid credentials."});	

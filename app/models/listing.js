@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
-var md5 = require("md5");
-
 const Schema = mongoose.Schema;
+
 var Listing = mongoose.model('Listing', new Schema({ 
     dealer_id : String,
     model_id : String, 
@@ -20,10 +19,9 @@ module.exports.save = function(data, cb){
     listing.model_id = data.model_id;
     listing.term_of_lease = data.term_of_lease;
     listing.monthly_lease_price = data.monthly_lease_price;
-    listing.vin_number = data.vin_number;
+    listing.vin_number = data.vin_number ? data.vin_number : 'N/A';
     listing.color = data.color;
-    listing.money_down = data.money_down;
-    //dealer.mobile = data.mobile;
+    listing.money_down = data.money_down? data.money_down: 'N/A';
     listing.save(function(err, response){
         if(err){
             cb(err);
@@ -31,7 +29,6 @@ module.exports.save = function(data, cb){
         cb(false,response);
     })
 }
-
 
 module.exports.find = function(data, cb){
     Dealer.findOne({email: data.email }, function(err,dealer){        

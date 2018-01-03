@@ -8,12 +8,13 @@ const Make = mongoose.model('Make', new Schema({
 );
 
 const Model = mongoose.model('Model', new Schema({
-    make : String,
+    make_id : String,
     name : String,
-    type : String
+    type : String,
+    model_id: String
 }))
 
-module.exports.addMakes = function(data, cb){   
+module.exports.addMakes = function(data, cb){
     Make.remove({}, function(err1, response1){
         Make.insertMany(data , function(err, response){
             if(err){
@@ -22,8 +23,24 @@ module.exports.addMakes = function(data, cb){
             cb(false,response);
         })    
     })
-    
 }
+
+
+module.exports.listAllMakes= function(cb){
+    Make.find({}, function(err, makes){
+        if(err) cb(err);
+        cb(false, makes);
+    })
+}
+
+module.exports.listAllModelsByMakeId= function(makeId , cb){
+    Model.find({make_id:makeId}, function(err, models){
+        if(err) cb(err);
+        cb(false, models);
+    })
+}
+
+
 
 module.exports.addModelsByMakeId = function(makeId, data, cb){    
     Model.remove({make_id: makeId }, function(err1, response1){
@@ -36,6 +53,7 @@ module.exports.addModelsByMakeId = function(makeId, data, cb){
     })    
 }
 
+/* 
 module.exports.findModels = function(data, cb){
     Model.find(data, function(err, models){
         if(err) {
@@ -46,10 +64,10 @@ module.exports.findModels = function(data, cb){
 }
 
 module.exports.findAllMakes = function(data, cb){
-    Make.find({}, function(err,makes){        
+    Make.find({}, function(err,makes){
         if(err) {
             cb(err);
         }
         cb(false, makes);        
     });
-}
+} */
