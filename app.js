@@ -21,10 +21,13 @@ app.use(require('./app/routes'));
 
 var dbConnect = require("./app/config/db");
 app.listen(3030, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3030!');
 });
 
-
-dbConnect.connect(function(data){
-  console.log("database connected");
-}) 
+dbConnect.connect(function(err,db){
+  if(err) {
+    console.log(err, "Error in connecting database");
+  } else{
+    //console.log(db, "Database connected");
+  }  
+})

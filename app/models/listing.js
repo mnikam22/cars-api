@@ -1,11 +1,15 @@
 var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-var Listing = mongoose.model('Listing', new Schema({ 
+var Listing = mongoose.model('Listing', new Schema({
     dealer_id : String,
-    model_id : String, 
+    model_id : String,
+    year: Number,
     term_of_lease : Number, 
     miles_per_year: Number,
+    fuel_type: String,
+    average_city : Number,
+    average_highway : Number,
     monthly_lease_price: Number,
     vin_number : String,
     color : String,

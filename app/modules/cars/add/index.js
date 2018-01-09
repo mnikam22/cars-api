@@ -1,6 +1,8 @@
-var car = require('../../../models/car');
+const car = require('../../../models/car');
 const https = require('https');
-var apiUrl = "https://vpic.nhtsa.dot.gov/api/";
+const apiUrl = "https://vpic.nhtsa.dot.gov/api/";
+const path = require('path'), fs = require('fs');
+
 
 module.exports.fetchAllMakes = function(req,res){
 	https.get(apiUrl+ "vehicles/GetMakesForVehicleType/car?format=json", (resp) => {
@@ -74,6 +76,20 @@ module.exports.fetchModelsByMakeId = function(req,res){
 		  	console.log("Error: " + err.message);
 			res.status(500).send(err.message);
 		});	
-	
+}
+
+
+module.exports.uploadModelImage = function(req,res){
+	var tempPath = req.body.image_url,
+	targetPath = path.resolve('./uploads/image.png');
+    var fileToDownload=req.body.fileToDownload;
+	var file = fs.createWriteStream("externalImage.png");
+	console.log(tempPath,"tempPath");
+    https.get(tempPath, (response)=> {
+      response.pipe(file);
+    });
+
+	res.send(targetPath);
+
 }
 

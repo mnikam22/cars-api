@@ -25,8 +25,7 @@ module.exports.addMakes = function(data, cb){
     })
 }
 
-
-module.exports.listAllMakes= function(cb){
+module.exports.listAllMakes = function(cb){
     Make.find({}, function(err, makes){
         if(err) cb(err);
         cb(false, makes);
