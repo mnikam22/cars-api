@@ -8,11 +8,18 @@ const Make = mongoose.model('Make', new Schema({
 );
 
 const Model = mongoose.model('Model', new Schema({
-    make_id : String,
-    name : String,
-    type : String,
-    model_id: String
-}))
+        make_id : String,
+        name : String,
+        type : String,
+        model_id: String
+    })
+);
+
+const ModelImage = mongoose.model('Model_Image', new Schema({ 
+        image_name: String,
+        model_id : String
+    })
+);
 
 module.exports.addMakes = function(data, cb){
     Make.remove({}, function(err1, response1){
@@ -52,7 +59,7 @@ module.exports.addModelsByMakeId = function(makeId, data, cb){
     })    
 }
 
-/* 
+
 module.exports.findModels = function(data, cb){
     Model.find(data, function(err, models){
         if(err) {
@@ -62,6 +69,16 @@ module.exports.findModels = function(data, cb){
     })
 }
 
+module.exports.addModelImage = function(data,cb){
+    var modelImage =  new ModelImage;
+    modelImage.model_id = data.model_id;
+    modelImage.image_name = data.image_name;
+    modelImage.save(function(err, imgres){
+        if(err) cb(err);
+        cb(false,imgres);
+    });
+}
+/* 
 module.exports.findAllMakes = function(data, cb){
     Make.find({}, function(err,makes){
         if(err) {

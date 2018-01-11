@@ -1,10 +1,11 @@
 const car = require('../../../models/car');
 const https = require('https');
+const http = require('http');
 const apiUrl = "https://vpic.nhtsa.dot.gov/api/";
 const path = require('path'), fs = require('fs');
+const helpers = require("../../../services/helpers");
 
-
-module.exports.fetchAllMakes = function(req,res){
+module.exports.fetchAllMakes = function(req,res){	
 	https.get(apiUrl+ "vehicles/GetMakesForVehicleType/car?format=json", (resp) => {
 	
 		  let data = '';
@@ -78,18 +79,35 @@ module.exports.fetchModelsByMakeId = function(req,res){
 		});	
 }
 
-
-module.exports.uploadModelImage = function(req,res){
-	var tempPath = req.body.image_url,
-	targetPath = path.resolve('./uploads/image.png');
-    var fileToDownload=req.body.fileToDownload;
-	var file = fs.createWriteStream("externalImage.png");
-	console.log(tempPath,"tempPath");
-    https.get(tempPath, (response)=> {
-      response.pipe(file);
-    });
-
-	res.send(targetPath);
-
+module.exports.uploadModelImage = function(req,res){	
+	let modelId  = req.params.modelId;	
+	
+	car.findModels({model_id : modelId}, function(err, data){
+		if(err || !data.length) {
+			helpers.sendError(res,"Invalid Car Model");
+		}
+		else{
+			let tempPath = req.body.image_url;
+			let fileType = tempPath.split('.').pop();
+			let uuid = helpers.uuid();
+			var fileName = `${modelId}${uuid}.${fileType}`;
+			var uploadedfile = fs.createWriteStream(`./app/uploads/${fileName}`);	
+			let client = https;
+			if(tempPath.indexOf("http://") > -1){
+				client = http;
+			}
+			client.get(tempPath, (response)=> {
+				response.pipe(uploadedfile);
+				car.addModelImage({image_name: fileName , model_id: modelId},function(err,imgsaved){
+					if(err) helpers.sendError(res,err);
+					helpers.sendSuccess(res, imgsaved);
+				})			
+			}, error=>{
+				helpers.sendError(res,error);
+			});	
+		}
+			
+	})
+    
 }
 

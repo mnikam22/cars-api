@@ -12,7 +12,7 @@ module.exports.connect = function(cb){
 	    db.on('error', function(){ cb("Error in database connection")} );
 	    cb(false,db);
     }
-    cb(false);    
+    cb(false);
 }
 
 module.exports.get = function(cb){
