@@ -53,6 +53,8 @@ module.exports.listAllModelsByMakeId = function(req, res){
 module.exports.fetchModelsByMakeId = function(req,res){
 	let makeId = req.params.makeId;
 	https.get(apiUrl+ "vehicles/GetModelsForMakeId/"+makeId+"?format=json", (resp) => {
+
+		console.log(resp,"response");
 		  let data = '';
 		  //A chunk of data has been recieved.
 		  resp.on('data', (chunk) => {
@@ -111,3 +113,32 @@ module.exports.uploadModelImage = function(req,res){
     
 }
 
+module.exports.updateMakeLogo = function(req,res){
+	let makeId  = req.params.makeId;
+	car.findMakes({make : makeId}, function(err, data){
+		if(err || !data.length) {
+			helpers.sendError(res,"Invalid Car Model");
+		}
+		else{
+			let tempPath = req.body.image_url;
+			let fileType = tempPath.split('.').pop();
+			let uuid = helpers.uuid();
+			var fileName = `${makeId}${uuid}.${fileType}`;
+			var uploadedfile = fs.createWriteStream(`./app/uploads/${fileName}`);	
+			let client = https;
+			if(tempPath.indexOf("http://") > -1){
+				client = http;
+			}
+			client.get(tempPath, (response)=> {
+				response.pipe(uploadedfile);
+				car.updateMakeLogo({logo: fileName , make_id: makeId},function(err,imgsaved){
+					if(err) helpers.sendError(res,err);
+					helpers.sendSuccess(res, imgsaved);
+				})
+			}, error=>{
+				helpers.sendError(res,error);
+			});	
+		}
+			
+	})	
+}

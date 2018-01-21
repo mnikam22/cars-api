@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser')
 const app = express();
 const jwt = require('express-jwt');
-app.use(jwt({ secret: 'Car-Deals-2017shhhhHHHHH'}).unless({path: ['/hello','/dealer/signup','/dealer/login']}));
+app.use(jwt({ secret: 'Car-Deals-2017shhhhHHHHH'}).unless({path: ['/hello','/dealer/signup','/dealer/login','/car/upload-image']}));
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('Invalid Authorization token');

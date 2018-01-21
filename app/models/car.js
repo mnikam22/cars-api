@@ -3,7 +3,8 @@ var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Make = mongoose.model('Make', new Schema({ 
         name: String,
-        make_id : String    
+        make_id : String,
+        logo : String
     })
 );
 
@@ -40,9 +41,9 @@ module.exports.listAllMakes = function(cb){
 }
 
 module.exports.listAllModelsByMakeId= function(makeId , cb){
-    Model.find({make_id:makeId}, function(err, models){
+    Model.find({make_id:makeId}, function(err, makeModels){
         if(err) cb(err);
-        cb(false, models);
+        cb(false, makeModels);
     })
 }
 
@@ -69,6 +70,34 @@ module.exports.findModels = function(data, cb){
     })
 }
 
+module.exports.findMakes = function(data, cb){
+    Make.find(data, function(err, makes){
+        if(err) {
+            cb(err);
+        }
+        cb(false, makes);        
+    })
+}
+
+
+module.exports.searchMakes = function(make, cb){
+    Make.find({name : new RegExp(make, 'i')}, function(err, makes){
+        if(err) {
+            cb(err);
+        }
+        cb(false, makes);
+    })
+}
+
+module.exports.searchModels = function(make, cb){
+    Model.find({name : new RegExp(make, 'i')}, function(err, models){
+        if(err) {
+            cb(err);
+        }
+        cb(false, models);
+    })
+}
+
 module.exports.addModelImage = function(data,cb){
     var modelImage =  new ModelImage;
     modelImage.model_id = data.model_id;
@@ -78,7 +107,21 @@ module.exports.addModelImage = function(data,cb){
         cb(false,imgres);
     });
 }
-/* 
+
+module.exports.updateMakeLogo = function(data,cb){
+    Make.findById(data.make_id, function(err, make){
+        if(err){
+            cb(err)
+        }
+        make.logo = data.logo ;
+        make.save(function(err2, saved){
+            if (err) cb(err2);
+            cb(false, "Logo added successfully!");
+        });
+    });    
+}
+
+/*
 module.exports.findAllMakes = function(data, cb){
     Make.find({}, function(err,makes){
         if(err) {
