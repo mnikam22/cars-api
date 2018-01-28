@@ -28,7 +28,7 @@ module.exports.searchCars = function(req,res){
 			}
 			else{
 				car.searchModels(query, function(err, models){
-					if(err){						
+					if(err){
 						res.send({error:false , data : resturnArr});
 					}
 					else{
@@ -38,34 +38,14 @@ module.exports.searchCars = function(req,res){
 				});
 			}
 		}
+	});   
+}
+
+module.exports.searchModelsData = function(req,res){
+	let params = req.params;
+	car.searchModelsByMakeId(params, function(err, makes){
+		if(err) res.status(500).send(err);
+		res.send(makes);
 	});
-	
-	/*car.findModels({model_id : modelId}, function(err, data){
-		console.log(data, "data");
-		if(err || !data.length) {
-			helpers.sendError(res,"Invalid Car Model");
-		}
-		else{
-			let tempPath = req.body.image_url;
-			let fileType = tempPath.split('.').pop();
-			let uuid = helpers.uuid();
-			var fileName = `${modelId}${uuid}.${fileType}`;
-			var uploadedfile = fs.createWriteStream(`./app/uploads/${fileName}`);	
-			let client = https;
-			if(tempPath.indexOf("http://") > -1){
-				client = http;
-			}
-			client.get(tempPath, (response)=> {
-				response.pipe(uploadedfile);
-				car.addModelImage({image_name: fileName , model_id: modelId},function(err,imgsaved){
-					if(err) helpers.sendError(res,err);
-					helpers.sendSuccess(res, imgsaved);
-				})			
-			}, error=>{
-				helpers.sendError(res,error);
-			});	
-		}			
-	})*/
-    
 }
 

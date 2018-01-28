@@ -23,9 +23,9 @@ module.exports.save = function(data, cb){
     listing.model_id = data.model_id;
     listing.term_of_lease = data.term_of_lease;
     listing.monthly_lease_price = data.monthly_lease_price;
-    listing.vin_number = data.vin_number ? data.vin_number : 'N/A';
+    listing.vin_number = data.vin_number ? data.vin_number :0;
     listing.color = data.color;
-    listing.money_down = data.money_down? data.money_down: 'N/A';
+    listing.money_down = data.money_down? data.money_down: 0 ;    
     listing.save(function(err, response){
         if(err){
             cb(err);
@@ -35,10 +35,10 @@ module.exports.save = function(data, cb){
 }
 
 module.exports.find = function(data, cb){
-    Dealer.findOne({email: data.email }, function(err,dealer){        
+    Listing.find(data, function(err,listings){        
         if(err) {
             cb(err);
         }
-        cb(false, dealer);        
+        cb(false, listings);        
     });
 }

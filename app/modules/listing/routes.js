@@ -1,4 +1,4 @@
 const router = require("express").Router();
 const add = require('./add');
-router.get('/makes', add.newListing);
+router.post('/new', add.newListing);
 module.exports = router;

@@ -83,7 +83,7 @@ module.exports.fetchModelsByMakeId = function(req,res){
 
 module.exports.uploadModelImage = function(req,res){	
 	let modelId  = req.params.modelId;	
-	
+	console.log(modelId, "modelId");
 	car.findModels({model_id : modelId}, function(err, data){
 		if(err || !data.length) {
 			helpers.sendError(res,"Invalid Car Model");

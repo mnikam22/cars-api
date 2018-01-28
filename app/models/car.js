@@ -12,7 +12,8 @@ const Model = mongoose.model('Model', new Schema({
         make_id : String,
         name : String,
         type : String,
-        model_id: String
+        model_id: String,
+        image_original : String
     })
 );
 
@@ -47,7 +48,13 @@ module.exports.listAllModelsByMakeId= function(makeId , cb){
     })
 }
 
-
+module.exports.searchModelsByMakeId = function(params, cb){
+    let skip = (params.page -1) * parseInt(params.limit);    
+    Model.find({make_id:params.makeId }, ["id", "name", "model_id","make_id","image_original"], {skip:skip , limit: parseInt( params.limit) }, function(err, models){
+        if(err) cb(err);
+        cb(false, models);
+    })
+}
 
 module.exports.addModelsByMakeId = function(makeId, data, cb){    
     Model.remove({make_id: makeId }, function(err1, response1){
@@ -57,9 +64,8 @@ module.exports.addModelsByMakeId = function(makeId, data, cb){
             }
             cb(false,response);
         })
-    })    
+    })   
 }
-
 
 module.exports.findModels = function(data, cb){
     Model.find(data, function(err, models){
@@ -99,13 +105,21 @@ module.exports.searchModels = function(make, cb){
 }
 
 module.exports.addModelImage = function(data,cb){
-    var modelImage =  new ModelImage;
+    /*var modelImage =  new ModelImage;
     modelImage.model_id = data.model_id;
     modelImage.image_name = data.image_name;
     modelImage.save(function(err, imgres){
         if(err) cb(err);
         cb(false,imgres);
-    });
+    });*/
+    Model.findOne({model_id: data.model_id}, function(err, model){
+        if(err) cb(err);
+        model.image_original =  data.image_name;
+        model.save(function(err2, model2){
+            if(err2) cb(err2);
+            cb(false, model2);
+        });
+    })
 }
 
 module.exports.updateMakeLogo = function(data,cb){
@@ -121,12 +135,12 @@ module.exports.updateMakeLogo = function(data,cb){
     });    
 }
 
-/*
-module.exports.findAllMakes = function(data, cb){
-    Make.find({}, function(err,makes){
-        if(err) {
-            cb(err);
-        }
-        cb(false, makes);        
-    });
-} */
+
+module.exports.getModelData = function(modelId, cb){
+    Model.findOne({model_id : modelId} , function(err,modelresponse){
+        console.log(modelresponse, "modelresponse");
+        if(err) cb(err);
+        cb(false, modelresponse);
+    })
+}
+

@@ -1,8 +1,11 @@
 const router = require("express").Router();
 const add = require('./add');
 const search = require('./search');
+const listing = require('./public-listing');
 router.get('/makes', add.listMakes);
 router.get('/makes/models/:makeId', add.listAllModelsByMakeId);
+router.get('/makes/models_data/:makeId/:page/:limit', search.searchModelsData);
+router.get('/model/details/:modelId', listing.getModelData);
 router.get('/fetch_all_makes', add.fetchAllMakes);
 router.get('/fetch_make_models/:makeId', add.fetchModelsByMakeId);
 router.post('/upload_model_image/:modelId', add.uploadModelImage);
