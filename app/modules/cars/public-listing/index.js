@@ -8,8 +8,13 @@ const helpers = require("../../../services/helpers");
 
 module.exports.getModelData = function(req, res){
     let modelId = req.params.modelId;
-    car.getModelData(modelId, function(err, response1){
+    car.getModelData(modelId, function(err, model_info){
         if(err) {res.status(501).send(err)}
-        res.send(response1);
+        listing.find({model_id : modelId}, function(err, listings){
+            if(err) {res.status(501).send(err)}
+            console.log(listings, "listings");
+            res.send({model_info : model_info , listings: listings});
+        });
+        
     })
 }
