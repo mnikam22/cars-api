@@ -7,7 +7,8 @@ var Dealer = mongoose.model('Dealer', new Schema({
     last_name: String,
     email : String, 
     password : String, 
-    mobile: String
+    mobile_no: String,
+    businessname : String
     })
 );
 
@@ -17,7 +18,8 @@ module.exports.save = function(data, cb){
     dealer.last_name = data.last_name;
     dealer.email = data.email;
     dealer.password = md5(data.password);
-    //dealer.mobile = data.mobile;
+    dealer.businessname = data.businessname;
+    dealer.mobile_no = data.mobile_no;
     dealer.save(function(err, response){
         if(err){
             cb(err);

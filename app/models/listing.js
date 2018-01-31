@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 var Listing = mongoose.model('Listing', new Schema({
     dealer_id : String,
+    dealer : { type: Schema.Types.ObjectId, ref: 'Dealer' },
     model_id : String,
     year: Number,
     term_of_lease : Number, 
@@ -20,6 +21,7 @@ var Listing = mongoose.model('Listing', new Schema({
 module.exports.save = function(data, cb){
     var listing = new Listing;
     listing.dealer_id = data.dealer_id;
+    listing.dealer = data.dealer_id;
     listing.model_id = data.model_id;
     listing.term_of_lease = data.term_of_lease;
     listing.monthly_lease_price = data.monthly_lease_price;
@@ -35,7 +37,7 @@ module.exports.save = function(data, cb){
 }
 
 module.exports.find = function(data, cb){
-    Listing.find(data, function(err,listings){        
+    Listing.find(data).populate('dealer').exec(function(err,listings){        
         if(err) {
             cb(err);
         }

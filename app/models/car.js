@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 const Make = mongoose.model('Make', new Schema({ 
         name: String,
@@ -104,14 +103,7 @@ module.exports.searchModels = function(make, cb){
     })
 }
 
-module.exports.addModelImage = function(data,cb){
-    /*var modelImage =  new ModelImage;
-    modelImage.model_id = data.model_id;
-    modelImage.image_name = data.image_name;
-    modelImage.save(function(err, imgres){
-        if(err) cb(err);
-        cb(false,imgres);
-    });*/
+module.exports.addModelImage = function(data,cb){    
     Model.findOne({model_id: data.model_id}, function(err, model){
         if(err) cb(err);
         model.image_original =  data.image_name;
@@ -135,12 +127,21 @@ module.exports.updateMakeLogo = function(data,cb){
     });    
 }
 
-
 module.exports.getModelData = function(modelId, cb){
     Model.findOne({model_id : modelId} , function(err,modelresponse){
-        console.log(modelresponse, "modelresponse");
         if(err) cb(err);
         cb(false, modelresponse);
     })
 }
 
+module.exports.getRelatedModels = function(modelId, cb){
+    Model.findOne({model_id : modelId} , function(err,modelresponse){        
+        if(err) cb(err);
+        if(modelresponse.make_id){
+            Model.find({make_id : modelresponse.make_id}).where("model_id").nin([modelId]).limit(4).exec(function(err, related_models){
+                if(err) cb(err);
+                cb(false, related_models);
+            })
+        }
+    })
+}
