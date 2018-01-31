@@ -10,7 +10,7 @@ module.exports.connect = function(cb){
     if(mongoose.connection.readyState != 1 ||  mongoose.connection.readyState != 2){
     	mongoose.connect(mongoConnectUrl);
 	    db = mongoose.connection;
-	    db.on('error', function(){ cb("Error in database connection")} );
+	    db.on('error', function(err){ cb(err)} );
 	    cb(false,db);
     }
     cb(false);
