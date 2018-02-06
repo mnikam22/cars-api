@@ -9,5 +9,3 @@ module.exports.dealerSignUp = function(req,res){
         }
     });
 }
-
-

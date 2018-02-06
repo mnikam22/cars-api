@@ -27,6 +27,7 @@ module.exports.save = function(data, cb){
     listing.monthly_lease_price = data.monthly_lease_price;
     listing.vin_number = data.vin_number ? data.vin_number :0;
     listing.color = data.color;
+    listing.miles_per_year = data.miles_per_year;
     listing.money_down = data.money_down? data.money_down: 0 ;    
     listing.save(function(err, response){
         if(err){

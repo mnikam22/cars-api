@@ -130,7 +130,11 @@ module.exports.updateMakeLogo = function(data,cb){
 module.exports.getModelData = function(modelId, cb){
     Model.findOne({model_id : modelId} , function(err,modelresponse){
         if(err) cb(err);
-        cb(false, modelresponse);
+        Make.findOne({make_id : modelresponse.make_id}, function(err, makeresponse){
+            if(err) cb(err);
+            var modeldata = {model: modelresponse, make : makeresponse};
+            cb(false, modeldata);
+        });
     })
 }
 

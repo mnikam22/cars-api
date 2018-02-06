@@ -1,18 +1,47 @@
 var mongoose = require("mongoose");
+var md5 = require('md5');
 const Schema = mongoose.Schema;
-var User = mongoose.model('User', new Schema({ name: String,email : String, password : String, parent: Number }));
+var User = mongoose.model('User', new Schema({ 
+    first_name: String,
+    last_name: String,
+    email : String,
+    mobile_no: String,  
+    password : String     
+}));
 
-module.exports.saveUser = function(user, cb) {
-    var newUser  	 = new User;
-    newUser.name  	 = "Tushar";
-    newUser.email    = "tnikam21@gmail.com";
-    newUser.password = "password";
-    newUser.save(function(data){
-    	console.log("New user created successfully");
-    	cb(data);
-    },
-    function(err){
-    	console.log("Error occured in creating new user");
-    	db(err);
+module.exports.save = function(data, cb) {
+    var newUser = new User;
+    newUser.first_name = data.first_name;
+    newUser.last_name = data.last_name;
+    newUser.email = data.email;
+    newUser.password = md5(data.password);    
+    newUser.mobile_no = data.mobile_no;
+    newUser.save(function(err, response){
+        if(err){
+            cb(err);
+        }
+        cb(false,response);
+    })
+}
+
+
+
+
+module.exports.find = function(data, cb){
+    User.findOne({email: data.email }, function(err,user){        
+        if(err) {
+            cb(err);
+        }
+        cb(false, user);        
+    });
+}
+
+
+module.exports.findById = function(userId, cb){
+    User.findById(userId, function(err,user){        
+        if(err) {
+            cb(err);
+        }
+        cb(false, user);        
     });
 }
