@@ -3,6 +3,7 @@ const add = require('./add');
 const search = require('./search');
 const listing = require('./public-listing');
 router.get('/makes', add.listMakes);
+router.get('/make/:makeId', add.getMakeData);
 router.get('/makes/models/:makeId', add.listAllModelsByMakeId);
 router.get('/makes/models_data/:makeId/:page/:limit', search.searchModelsData);
 router.get('/model/details/:modelId', listing.getModelData);

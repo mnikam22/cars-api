@@ -75,8 +75,8 @@ module.exports.findModels = function(data, cb){
     })
 }
 
-module.exports.findMakes = function(data, cb){
-    Make.find(data, function(err, makes){
+module.exports.findMake = function(data, cb){
+    Make.findOne(data, function(err, makes){
         if(err) {
             cb(err);
         }
@@ -115,7 +115,7 @@ module.exports.addModelImage = function(data,cb){
 }
 
 module.exports.updateMakeLogo = function(data,cb){
-    Make.findById(data.make_id, function(err, make){
+    Make.findOne({make_id: data.make_id}, function(err, make){
         if(err){
             cb(err)
         }

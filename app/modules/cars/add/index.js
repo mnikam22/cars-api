@@ -115,9 +115,9 @@ module.exports.uploadModelImage = function(req,res){
 
 module.exports.updateMakeLogo = function(req,res){
 	let makeId  = req.params.makeId;
-	car.findMakes({make : makeId}, function(err, data){
-		if(err || !data.length) {
-			helpers.sendError(res,"Invalid Car Model");
+	car.findMake({make_id : makeId}, function(err, data){
+		if(err || !data._id) {
+			helpers.sendError(res,"Invalid Car Make");
 		}
 		else{
 			let tempPath = req.body.image_url;
@@ -132,13 +132,20 @@ module.exports.updateMakeLogo = function(req,res){
 			client.get(tempPath, (response)=> {
 				response.pipe(uploadedfile);
 				car.updateMakeLogo({logo: fileName , make_id: makeId},function(err,imgsaved){
-					if(err) helpers.sendError(res,err);
+					if(err) {helpers.sendError(res,err);}
 					helpers.sendSuccess(res, imgsaved);
 				})
 			}, error=>{
 				helpers.sendError(res,error);
 			});	
 		}
-			
 	})	
+}
+
+module.exports.getMakeData = function(req,res){
+	let makeId  = req.params.makeId;
+	car.findMake({make_id : makeId}, function(err,makeData){
+		if(err) helpers.sendError(res, err);
+		helpers.sendSuccess(res,makeData);
+	});	
 }
