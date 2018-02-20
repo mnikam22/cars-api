@@ -6,8 +6,10 @@ var User = mongoose.model('User', new Schema({
     last_name: String,
     email : String,
     mobile_no: String,  
-    password : String     
+    password : String,
+    role : String     
 }));
+
 
 module.exports.save = function(data, cb) {
     var newUser = new User;
@@ -16,6 +18,7 @@ module.exports.save = function(data, cb) {
     newUser.email = data.email;
     newUser.password = md5(data.password);    
     newUser.mobile_no = data.mobile_no;
+    newUSer.role = 'customer';
     newUser.save(function(err, response){
         if(err){
             cb(err);
@@ -23,8 +26,6 @@ module.exports.save = function(data, cb) {
         cb(false,response);
     })
 }
-
-
 
 
 module.exports.find = function(data, cb){

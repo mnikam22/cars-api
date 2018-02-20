@@ -2,13 +2,15 @@ var mongoose = require("mongoose");
 var md5 = require("md5");
 
 const Schema = mongoose.Schema;
+
 var Dealer = mongoose.model('Dealer', new Schema({ 
     first_name: String,
     last_name: String,
     email : String, 
     password : String, 
     mobile_no: String,
-    businessname : String
+    businessname : String,
+    role : String
     })
 );
 
